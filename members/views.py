@@ -3,8 +3,8 @@ from typing import Callable
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from .models import Member
-from utils.auth import encrypt_password, get_member, get_member_from_token, get_token
+from .models import Member, Role
+from utils.auth import encrypt_password, get_member, get_token
 from utils.image_loader import load_image, save_image
 from utils.decorators import need_login
 
@@ -76,4 +76,17 @@ def logout(request: HttpRequest, member: Member, data: dict):
     response.delete_cookie('token')
     return response
     
+@need_login
+def list_member(request: HttpRequest, member: Member, data: dict):
+
+    get_info = lambda member: {'name': member.name, 
+                               'image': load_image(f'member/{member.id}.jpg'),
+                               'message': member.message,
+                               }
+    
+    president = list(Member.objects.filter(role=Role.PRESIDENT).order_by('-name'))
+    staff = list(Member.objects.filter(role=Role.STAFF).order_by('-name'))
+    members = list(member.objects.filter(role=Role.MEMBER).order_by('-name'))
+
+    return JsonResponse({'members': [get_info(m) for m in president + staff + members]})
     
