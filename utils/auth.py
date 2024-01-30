@@ -1,6 +1,6 @@
 import bcrypt, jwt
 from typing import Optional
-from ..members.models import Member
+from members.models import Member
 from release_web_backend import settings
 
 JWT_KEY = settings.get_secret('JWT_KEY')
