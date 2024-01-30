@@ -7,7 +7,10 @@ class Book(models.Model):
     author = models.CharField(max_length=100)
     publisher = models.CharField(max_length=100)
     available = models.BooleanField()
-    tags = models.ManyToManyField("BookTag")
+    tags = models.ManyToManyField("BookTag", related_name='books', blank=True, null=True)
+
+    def __str__(self):
+        return f'{self.name}'
 
 class BookRecord(models.Model):
     borrower = models.ForeignKey(Member, models.PROTECT)
