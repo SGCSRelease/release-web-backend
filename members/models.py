@@ -26,3 +26,4 @@ class Member(models.Model):
     email = models.EmailField()
     state = models.IntegerField(choices=State.choices)
     role = models.IntegerField(choices=Role.choices)
+    message = models.CharField(max_length=300)
