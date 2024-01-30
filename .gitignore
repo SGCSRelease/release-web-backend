@@ -1,0 +1,4 @@
+database/*
+secrets.json
+*/migrations
+*/__pycache__
