@@ -9,7 +9,7 @@ def need_login(func: Callable[[HttpRequest, Member, dict], HttpResponse]) -> Cal
     
     def wrapper(request: HttpRequest) -> HttpResponse:
         data = json.loads(request.body) if request.body != b'' else {}
-        member = get_member_from_token(request.COOKIES['token'])
+        member = get_member_from_token(request.COOKIES['token']) if 'token' in request.COOKIES else None
         if member == None:
             return HttpResponse(status=401)
         
