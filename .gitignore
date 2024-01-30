@@ -3,3 +3,4 @@ secrets.json
 */migrations
 */__pycache__
 venv
+nohup.out
