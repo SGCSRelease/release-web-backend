@@ -17,3 +17,6 @@ class BookRecord(models.Model):
 
 class BookTag(models.Model):
     tag = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.tag
