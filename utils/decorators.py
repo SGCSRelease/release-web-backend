@@ -8,10 +8,11 @@ from .auth import get_member_from_token
 def need_login(func: Callable[[HttpRequest, Member, dict], HttpResponse]) -> Callable[[HttpRequest], HttpResponse]:
     
     def wrapper(request: HttpRequest) -> HttpResponse:
-        data = json.loads(request.body)
+        data = json.loads(request.body) if request.body != b'' else {}
         member = get_member_from_token(request.COOKIES['token'])
         if member == None:
             return HttpResponse(status=401)
-        func(request, member, data)
+        
+        return func(request, member, data)
 
     return wrapper
