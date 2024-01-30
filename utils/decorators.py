@@ -5,7 +5,7 @@ from django.http import HttpRequest, HttpResponse
 from members.models import Member
 from .auth import get_member_from_token
 
-def need_login(func: Callable[[HttpRequest, Member, dict], HttpResponse]):
+def need_login(func: Callable[[HttpRequest, Member, dict], HttpResponse]) -> Callable[[HttpRequest], HttpResponse]:
     
     def wrapper(request: HttpRequest) -> HttpResponse:
         data = json.loads(request.body)
