@@ -11,10 +11,13 @@ class State:
     )
 
 class Role:
+    MEMBER = 0
+    STAFF = 1
+    PRESIDENT = 2
     choices = (
-        (0, '학회원'),
-        (1, '임원'),
-        (2, '학회장'),
+        (MEMBER, '학회원'),
+        (STAFF, '임원'),
+        (PRESIDENT, '학회장'),
     )
     
 
