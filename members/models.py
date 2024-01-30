@@ -22,7 +22,7 @@ class Role:
 class Member(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=10)
-    password = models.CharField(max_length=100)
+    password = models.BinaryField(max_length=100)
     phone = models.CharField(max_length=20)
     email = models.EmailField()
     state = models.IntegerField(choices=State.choices)
