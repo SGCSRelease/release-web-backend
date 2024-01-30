@@ -4,19 +4,9 @@ from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from .models import Member
-from .auth import encrypt_password, get_member, get_member_from_token, get_token
-from release_web_backend.image_loader import load_image, save_image
-
-def need_login(func: Callable[[HttpRequest, Member, dict], HttpResponse]):
-    
-    def wrapper(request: HttpRequest) -> HttpResponse:
-        data = json.loads(request.body)
-        member = get_member_from_token(request.COOKIES['token'])
-        if member == None:
-            return HttpResponse(status=401)
-        func(request, member, data)
-
-    return wrapper
+from utils.auth import encrypt_password, get_member, get_member_from_token, get_token
+from utils.image_loader import load_image, save_image
+from utils.decorators import need_login
 
 @csrf_exempt
 def login(request: HttpRequest):

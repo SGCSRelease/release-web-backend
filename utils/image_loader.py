@@ -1,5 +1,5 @@
 import os, base64
-from .settings import BASE_DIR
+from ..release_web_backend.settings import BASE_DIR
 
 IMAGE_DIR = os.path.join(BASE_DIR, 'database', 'member')
 
