@@ -1,5 +1,4 @@
-import json, jwt
-from typing import Callable
+import json
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -9,7 +8,7 @@ from utils.image_loader import load_image, save_image
 from utils.decorators import need_login
 
 @csrf_exempt
-def login(request: HttpRequest):
+def login(request: HttpRequest) -> JsonResponse:
 
     data = json.loads(request.body)
     id = data['id']
@@ -25,7 +24,7 @@ def login(request: HttpRequest):
 
 
 @need_login
-def get_profile(request: HttpRequest, member: Member, data: dict):
+def get_profile(request: HttpRequest, member: Member, data: dict) -> JsonResponse:
 
     return JsonResponse({
         'name': member.name,
@@ -41,7 +40,7 @@ def get_profile(request: HttpRequest, member: Member, data: dict):
 
 @csrf_exempt
 @need_login
-def edit_profile(request: HttpRequest, member: Member, data: dict):
+def edit_profile(request: HttpRequest, member: Member, data: dict) -> JsonResponse:
     
     if 'phone' in data:
         member.phone = data['phone']
@@ -58,26 +57,29 @@ def edit_profile(request: HttpRequest, member: Member, data: dict):
 
 @csrf_exempt
 @need_login
-def edit_password(request: HttpRequest, member: Member, data: dict):
+def edit_password(request: HttpRequest, member: Member, data: dict) -> JsonResponse:
     
     if get_member(member.id, data['oldPassword']) == None:
         return JsonResponse({'success': False, 'error': '잘못된 비밀번호입니다.'})
     
     member.password = encrypt_password(data['newPassword'])
     member.save()
-    return JsonResponse({'success': True})
+
+    response = JsonResponse({'success': True})
+    response.set_cookie('token', get_token(member))
+    return response
 
 
 @csrf_exempt
 @need_login
-def logout(request: HttpRequest, member: Member, data: dict):
+def logout(request: HttpRequest, member: Member, data: dict) -> JsonResponse:
 
     response = JsonResponse({'success': True})
     response.delete_cookie('token')
     return response
     
 @need_login
-def list_member(request: HttpRequest, member: Member, data: dict):
+def list_member(request: HttpRequest, member: Member, data: dict) -> JsonResponse:
 
     get_info = lambda member: {
         'name': member.name, 
@@ -87,7 +89,7 @@ def list_member(request: HttpRequest, member: Member, data: dict):
     
     president = list(Member.objects.filter(role=Role.PRESIDENT).order_by('-name'))
     staff = list(Member.objects.filter(role=Role.STAFF).order_by('-name'))
-    members = list(member.objects.filter(role=Role.MEMBER).order_by('-name'))
+    members = list(Member.objects.filter(role=Role.MEMBER).order_by('-name'))
 
     return JsonResponse({'members': [get_info(m) for m in president + staff + members]})
     
