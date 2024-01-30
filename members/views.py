@@ -79,10 +79,11 @@ def logout(request: HttpRequest, member: Member, data: dict):
 @need_login
 def list_member(request: HttpRequest, member: Member, data: dict):
 
-    get_info = lambda member: {'name': member.name, 
-                               'image': load_image(f'member/{member.id}.jpg'),
-                               'message': member.message,
-                               }
+    get_info = lambda member: {
+        'name': member.name, 
+        'image': load_image(f'member/{member.id}.jpg'),
+        'message': member.message,
+    }
     
     president = list(Member.objects.filter(role=Role.PRESIDENT).order_by('-name'))
     staff = list(Member.objects.filter(role=Role.STAFF).order_by('-name'))
