@@ -7,7 +7,7 @@ class Book(models.Model):
     author = models.CharField(max_length=100)
     publisher = models.CharField(max_length=100)
     available = models.BooleanField()
-    tags = models.ManyToManyField("BookTag", related_name='books', blank=True, null=True)
+    tags = models.ManyToManyField("BookTag", related_name='books', blank=True)
 
     def __str__(self):
         return f'{self.name}'
@@ -16,7 +16,7 @@ class BookRecord(models.Model):
     borrower = models.ForeignKey(Member, models.PROTECT)
     book = models.ForeignKey(Book, models.PROTECT)
     start_date = models.DateField()
-    end_date = models.DateField(null=True)
+    return_date = models.DateField(null=True)
 
 class BookTag(models.Model):
     tag = models.CharField(max_length=100)
