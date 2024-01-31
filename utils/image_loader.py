@@ -1,7 +1,7 @@
 import os, base64
 from release_web_backend.settings import BASE_DIR
 
-IMAGE_DIR = os.path.join(BASE_DIR, 'database', 'member')
+IMAGE_DIR = os.path.join(BASE_DIR, 'database')
 
 def load_image(path: str) -> str:
     image_path = os.path.join(IMAGE_DIR, path)
