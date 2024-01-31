@@ -1,4 +1,5 @@
 from datetime import date
+from typing import Callable
 from django.http import Http404, HttpRequest, JsonResponse
 
 from .models import Book, BookRecord
@@ -9,15 +10,16 @@ from utils.image_loader import load_image
 @need_login
 def list_book(request: HttpRequest, member: Member, data: dict):
     
-    get_info = lambda book: {
-        'name': book.name,
-        'id': book.id,
-        'author': book.author,
-        'publisher': book.puslisher,
-        'image': '',
-        'available': book.available,
-        'tags': [str(tag) for tag in book.tags.all()],
-    }
+    get_info: Callable[[Book], dict] = \
+        lambda book: {
+            'name': book.name,
+            'id': book.id,
+            'author': book.author,
+            'publisher': book.publisher,
+            'image': '',
+            'available': book.available,
+            'tags': [str(tag) for tag in book.tags.all()],
+        }
     
     return JsonResponse({'books': [get_info(b) for b in Book.objects.all()]})
 

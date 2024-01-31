@@ -1,4 +1,5 @@
 import json
+from typing import Callable
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -81,11 +82,12 @@ def logout(request: HttpRequest, member: Member, data: dict) -> JsonResponse:
 @need_login
 def list_member(request: HttpRequest, member: Member, data: dict) -> JsonResponse:
 
-    get_info = lambda member: {
+    get_info: Callable[[Member], dict] = \
+        lambda member: {
         'name': member.name, 
         'image': load_image(f'member/{member.id}.jpg'),
         'message': member.message,
-    }
+        }
     
     president = list(Member.objects.filter(role=Role.PRESIDENT).order_by('-name'))
     staff = list(Member.objects.filter(role=Role.STAFF).order_by('-name'))
