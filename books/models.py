@@ -8,6 +8,7 @@ class Book(models.Model):
     publisher = models.CharField(max_length=100)
     available = models.BooleanField()
     tags = models.ManyToManyField("BookTag", related_name='books', blank=True)
+    donor = models.ForeignKey(Member, models.PROTECT, blank=True, null=True)
 
     def __str__(self):
         return f'{self.name}'
